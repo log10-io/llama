@@ -76,6 +76,37 @@ torchrun --nproc_per_node 1 example_chat_completion.py \
 Llama 2 is a new technology that carries potential risks with use. Testing conducted to date has not — and could not — cover all scenarios.
 In order to help developers address these risks, we have created the [Responsible Use Guide](Responsible-Use-Guide.pdf). More details can be found in our research paper as well.
 
+## Deploy a Flask server and use with Log10
+
+On a AWS instance with an A10 GPU clone this repo, and launch:
+
+`torchrun --nproc_per_node 1 app.py`
+
+### Log calls to the model
+
+For example, if using the Langchain model abstraction (replace xx with the URL of the deployed instance):
+
+```python
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage, SystemMessage
+
+from log10.langchain import Log10Callback
+from log10.llm import Log10Config
+
+
+log10_callback = Log10Callback(log10_config=Log10Config())
+
+messages = [
+    SystemMessage(content="You are a ping pong machine"),
+    HumanMessage(content="Ping?"),
+]
+
+# Assumes Llama-2 model is deployed at URL below and accepts/returns OpenAI style chat messages
+llm = ChatOpenAI(model_name="llama-2-7b-chat", callbacks=[log10_callback], temperature=0.5, openai_api_base="http://xx.xx.xx.xx:5000")
+completion = llm.predict_messages(messages)
+print(completion)
+```
+
 ## Issues
 
 Please report any software “bug,” or other problems with the models through one of the following means:
