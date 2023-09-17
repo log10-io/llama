@@ -6,7 +6,7 @@ import fire
 
 from llama import Llama
 
-max_new_tokens = 1536
+max_new_tokens = 512
 
 app = Flask(__name__)
 
@@ -14,8 +14,8 @@ deploy_model = 'llama-2-7b-chat'
 
 generator = Llama.build(ckpt_dir=deploy_model +'/',
                         tokenizer_path='tokenizer.model',
-                        max_seq_len=512,
-                        max_batch_size=4,
+                        max_seq_len=3584,
+                        max_batch_size=1,
                     )
 
 @app.route('/<path:method>', methods=['POST'])
