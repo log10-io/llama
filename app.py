@@ -6,15 +6,15 @@ import fire
 
 from llama import Llama
 
-max_new_tokens = 512
+max_new_tokens = 384
 
 app = Flask(__name__)
 
-deploy_model = 'llama-2-7b-chat'
+deploy_model = 'llama-2-70b-chat'
 
 generator = Llama.build(ckpt_dir=deploy_model +'/',
                         tokenizer_path='tokenizer.model',
-                        max_seq_len=3584,
+                        max_seq_len=3712,
                         max_batch_size=1,
                     )
 
@@ -28,7 +28,7 @@ def handle_api_call(method):
         temperature = 0.1 if "temperature" not in data.keys() else data.get("temperature")
         top_p = 1 if "top_p" not in data.keys() else data.get("top_p")
 
-        if model == 'llama-2-7b-chat':
+        if model == 'llama-2-70b-chat':
             resp = generator.chat_completion(
                 [messages_oai],
                 max_gen_len=max_new_tokens,
