@@ -6,6 +6,13 @@ import fire
 from llama import Llama
 from typing import List
 
+generator = Llama.build(
+    ckpt_dir="llama-2-7b",
+    tokenizer_path='tokenizer.model',
+    max_seq_len=512,
+    max_batch_size=4,
+)
+
 def main(
     ckpt_dir: str,
     tokenizer_path: str,
@@ -29,12 +36,12 @@ def main(
         max_gen_len (int, optional): The maximum length of generated sequences. Defaults to 64.
         max_batch_size (int, optional): The maximum batch size for generating sequences. Defaults to 4.
     """ 
-    generator = Llama.build(
-        ckpt_dir=ckpt_dir,
-        tokenizer_path=tokenizer_path,
-        max_seq_len=max_seq_len,
-        max_batch_size=max_batch_size,
-    )
+    # generator = Llama.build(
+    #     ckpt_dir=ckpt_dir,
+    #     tokenizer_path=tokenizer_path,
+    #     max_seq_len=max_seq_len,
+    #     max_batch_size=max_batch_size,
+    # )
 
     prompts: List[str] = [
         # For these prompts, the expected answer is the natural continuation of the prompt

@@ -6,6 +6,10 @@ import fire
 
 from llama import Llama
 
+import random 
+
+import os
+
 max_new_tokens = 384
 
 app = Flask(__name__)
@@ -28,7 +32,7 @@ def handle_api_call(method):
         temperature = 0.1 if "temperature" not in data.keys() else data.get("temperature")
         top_p = 1 if "top_p" not in data.keys() else data.get("top_p")
 
-        if model == 'llama-2-70b-chat':
+        if model == deploy_model:
             resp = generator.chat_completion(
                 [messages_oai],
                 max_gen_len=max_new_tokens,
@@ -51,4 +55,6 @@ def handle_api_call(method):
         return jsonify({'error': 'Invalid inputs.'}), 400
 
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0')
+    local_rank = int(os.environ.get("LOCAL_RANK"))
+    if local_rank==0:
+        app.run(debug=False, host='0.0.0.0', port=5000)

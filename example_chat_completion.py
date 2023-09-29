@@ -7,6 +7,13 @@ import fire
 
 from llama import Llama, Dialog
 
+generator = Llama.build(
+    ckpt_dir="llama-2-7b",
+    tokenizer_path='tokenizer.model',
+    max_seq_len=512,
+    max_batch_size=4,
+)
+
 
 def main(
     ckpt_dir: str,
@@ -32,12 +39,6 @@ def main(
         max_gen_len (int, optional): The maximum length of generated sequences. If None, it will be
             set to the model's max sequence length. Defaults to None.
     """
-    generator = Llama.build(
-        ckpt_dir=ckpt_dir,
-        tokenizer_path=tokenizer_path,
-        max_seq_len=max_seq_len,
-        max_batch_size=max_batch_size,
-    )
 
     dialogs: List[Dialog] = [
         [{"role": "user", "content": "what is the recipe of mayonnaise?"}],
