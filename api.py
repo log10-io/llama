@@ -172,6 +172,14 @@ def message_route():
     # get messages from request
     messages = request.json.get("messages")
 
+    token = request.headers.get('Authorization')
+    expected_token = "Bearer " + os.environ.get("LLAMA_SECRET", "piw9OothaaYii3seseech7Ko")
+
+    if not token or token != expected_token:
+        response = jsonify({"error": "Unauthorized"})
+        response.status_code = 401
+        return response
+
     # validate message format
     errors = check_messages(messages)
     if errors:

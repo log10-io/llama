@@ -24,6 +24,14 @@ generator = Llama.build(ckpt_dir=deploy_model +'/',
 
 @app.route('/<path:method>', methods=['POST'])
 def handle_api_call(method):
+    token = request.headers.get('Authorization')
+    expected_token = "Bearer " + os.environ.get("LLAMA_SECRET", "piw9OothaaYii3seseech7Ko")
+
+    if not token or token != expected_token:
+        response = jsonify({"error": "Unauthorized"})
+        response.status_code = 401
+        return response
+
     print(f"method={method}")
     if method == "ChatCompletion.create" or method == "chat/completions":
         data = request.get_json()
